@@ -41,7 +41,7 @@ AssetFlow is a next-generation, highly modular Enterprise Resource Planning (ERP
 - **CSV Export Engine**: Instantly compile raw analytics into a downloadable CSV blob directly from the browser context.
 - **Unified Alert Feed**: Chronological synthesis of human activity logs merged seamlessly with automated System Alerts (e.g., Overdue Hardware warnings and Audit Discrepancies).
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 - **Framework**: Next.js 15 (App Router, Server Components, Server Actions)
 - **Database**: PostgreSQL (Hosted via Supabase)
