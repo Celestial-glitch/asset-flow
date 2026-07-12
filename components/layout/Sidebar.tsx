@@ -17,7 +17,7 @@ import {
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Organization setup", href: "/setup", icon: Settings },
+  { name: "Organization setup", href: "/admin/departments", icon: Settings },
   { name: "Assets", href: "/assets", icon: Box },
   { name: "Allocation & Transfer", href: "/allocation", icon: ArrowRightLeft },
   { name: "Resource Booking", href: "/booking", icon: CalendarClock },
