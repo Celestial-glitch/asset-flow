@@ -19,14 +19,16 @@ enum UserRole {
 }
 
 model Department {
-  id          String   @id @default(cuid())
-  name        String   @unique
+  id          String       @id @default(cuid())
+  name        String       @unique
   description String?
-  headId      String?  @unique
-  head        User?    @relation("DepartmentHead", fields: [headId], references: [id])
-  users       User[]   @relation("DepartmentUsers")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  headId      String?      @unique
+  head        User?        @relation("DepartmentHead", fields: [headId], references: [id])
+  users       User[]       @relation("DepartmentUsers")
+  allocations   Allocation[]
+  auditCycles   AuditCycle[]
+  createdAt     DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model AssetCategory {
@@ -34,19 +36,158 @@ model AssetCategory {
   name                     String   @unique
   description              String?
   requiresWarrantyTracking Boolean  @default(false)
+  assets                   Asset[]
   createdAt                DateTime @default(now())
   updatedAt                DateTime @updatedAt
 }
 
 model User {
-  id             String      @id @default(cuid())
-  email          String      @unique
-  passwordHash   String
-  name           String
-  role           UserRole    @default(EMPLOYEE)
-  departmentId   String?
-  department     Department? @relation("DepartmentUsers", fields: [departmentId], references: [id])
-  headOfDept     Department? @relation("DepartmentHead")
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  id              String               @id @default(cuid())
+  email           String               @unique
+  passwordHash    String
+  name            String
+  role            UserRole             @default(EMPLOYEE)
+  departmentId    String?
+  department      Department?          @relation("DepartmentUsers", fields: [departmentId], references: [id])
+  headOfDept      Department?          @relation("DepartmentHead")
+  allocations     Allocation[]
+  bookings        ResourceBooking[]
+  maintenanceReqs MaintenanceRequest[]
+  auditCycles     AuditCycle[]
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+}
+
+enum AssetStatus {
+  AVAILABLE
+  ALLOCATED
+  MAINTENANCE
+  LOST
+  RETIRED
+}
+
+enum AllocationStatus {
+  ACTIVE
+  RETURNED
+  OVERDUE
+}
+
+model Asset {
+  id               String               @id @default(cuid())
+  assetTag         String               @unique
+  name             String
+  categoryId       String
+  category         AssetCategory        @relation(fields: [categoryId], references: [id])
+  serialNumber     String?
+  status           AssetStatus          @default(AVAILABLE)
+  condition        String?
+  location         String?
+  isSharedBookable Boolean              @default(false)
+  allocations      Allocation[]
+  bookings         ResourceBooking[]
+  maintenanceReqs  MaintenanceRequest[]
+  auditItems       AuditItem[]
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+}
+
+model Allocation {
+  id                 String           @id @default(cuid())
+  assetId            String
+  asset              Asset            @relation(fields: [assetId], references: [id])
+  userId             String
+  user               User             @relation(fields: [userId], references: [id])
+  departmentId       String?
+  department         Department?      @relation(fields: [departmentId], references: [id])
+  assignedDate       DateTime         @default(now())
+  expectedReturnDate DateTime?
+  actualReturnDate   DateTime?
+  status             AllocationStatus @default(ACTIVE)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+}
+
+enum BookingStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum MaintenancePriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum MaintenanceStatus {
+  PENDING
+  APPROVED
+  IN_PROGRESS
+  RESOLVED
+}
+
+model ResourceBooking {
+  id        String        @id @default(cuid())
+  assetId   String
+  asset     Asset         @relation(fields: [assetId], references: [id])
+  userId    String
+  user      User          @relation(fields: [userId], references: [id])
+  startTime DateTime
+  endTime   DateTime
+  status    BookingStatus @default(UPCOMING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model MaintenanceRequest {
+  id               String              @id @default(cuid())
+  assetId          String
+  asset            Asset               @relation(fields: [assetId], references: [id])
+  requestedById    String
+  requestedBy      User                @relation(fields: [requestedById], references: [id])
+  issueDescription String
+  priority         MaintenancePriority @default(MEDIUM)
+  status           MaintenanceStatus   @default(PENDING)
+  dateRequested    DateTime            @default(now())
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+}
+
+enum AuditStatus {
+  OPEN
+  CLOSED
+}
+
+enum AuditItemStatus {
+  UNVERIFIED
+  VERIFIED
+  MISSING
+  DAMAGED
+}
+
+model AuditCycle {
+  id            String        @id @default(cuid())
+  name          String
+  departmentId  String?       
+  department    Department?   @relation(fields: [departmentId], references: [id])
+  status        AuditStatus   @default(OPEN)
+  conductedById String
+  conductedBy   User          @relation(fields: [conductedById], references: [id])
+  items         AuditItem[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model AuditItem {
+  id           String          @id @default(cuid())
+  auditCycleId String
+  auditCycle   AuditCycle      @relation(fields: [auditCycleId], references: [id])
+  assetId      String
+  asset        Asset           @relation(fields: [assetId], references: [id])
+  status       AuditItemStatus @default(UNVERIFIED)
+  notes        String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
 }
