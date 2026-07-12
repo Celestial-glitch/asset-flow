@@ -69,7 +69,6 @@ export default async function AllocationPage() {
                     ) : (
                       <button 
                         className="inline-flex items-center text-amber-600 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-md transition-colors"
-                        onClick={() => {/* Transfer Request Logic for Phase 4 */}}
                         title="Transfer workflow will be implemented in Phase 4"
                       >
                         <ArrowRightLeft className="w-4 h-4 mr-1.5" />
