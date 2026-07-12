@@ -1,8 +1,8 @@
-# AssetFlow ERP 🚀
+# AssetFlow ERP 
 
 AssetFlow is a next-generation, highly modular Enterprise Resource Planning (ERP) system designed to eliminate spreadsheet chaos for modern organizations. Built specifically for this Hackathon, AssetFlow focuses entirely on atomic physical asset tracking, role-based workflows, and real-time operational analytics without the bloat of traditional accounting or invoicing modules.
 
-## 🌟 Key Features in Detail
+##  Key Features in Detail
 
 ### 1. Role-Based Access Control (RBAC) & Security
 - **Authentication**: Secured end-to-end via NextAuth.js (v5 Beta) using bcrypt hashing.
@@ -51,7 +51,7 @@ AssetFlow is a next-generation, highly modular Enterprise Resource Planning (ERP
 - **Data Visualization**: Recharts
 - **Icons**: Lucide React
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Clone the repository**
 2. **Install dependencies**: `npm install`
