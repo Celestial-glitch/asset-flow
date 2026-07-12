@@ -1,4 +1,5 @@
 {
+  // TS Reload trigger
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -19,8 +20,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@prisma/client": ["./node_modules/@prisma/client"]
+      "@/*": ["./*"]
     }
   },
   "include": [
